@@ -1,0 +1,29 @@
+---
+- name: Update repository indexes
+  hosts: all
+  become: true
+  tasks:
+  
+    - name: Update repository index (Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- name: Install and configure BlockStorage role
+  hosts: BlockStorage
+  become: true
+  roles:
+    - BlockStorage
+
+- name: Install and configure Compute role
+  hosts: Compute
+  become: true
+  roles:
+    - Compute
+
+- name: Install and configure Controller role
+  hosts: Controller
+  become: true
+  roles:
+    - Controller
+    

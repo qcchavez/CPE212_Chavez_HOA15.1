@@ -1,0 +1,16 @@
+---
+
+- name: Install Neutron
+  apt:
+    name:
+      - neutron-server
+      - neutron-dhcp-agent
+      - neutron-l3-agent
+      - neutron-metadata-agent
+    state: present
+
+- name: Enable Neutron server service
+  service:
+    name: neutron-server
+    state: restarted
+

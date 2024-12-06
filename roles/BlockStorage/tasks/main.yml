@@ -1,0 +1,39 @@
+---
+- name: Installing Cinder
+  apt:
+    name:
+      - python3-openstackclient
+      - cinder-api
+      - cinder-scheduler
+      - cinder-volume
+    state: present
+    update_cache: yes
+    
+- name: Create Cinder API service file
+  copy:
+    dest: /etc/systemd/system/cinder-api.service
+    content: |
+      [Unit]
+      Description=OpenStack Cinder API Service
+      After=network.target
+
+      [Service]
+      User=cinder
+      ExecStart=/usr/bin/cinder-api
+      ExecStop=/bin/kill -TERM $MAINPID
+      Restart=always
+      LimitNOFILE=8192
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Enable and start Cinder services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: true
+  loop:
+    - cinder-api
+    - cinder-scheduler
+    - cinder-volume
+

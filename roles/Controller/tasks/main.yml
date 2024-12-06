@@ -1,0 +1,30 @@
+---
+- name: Install OpenStack Dashboard
+  apt:
+    name: openstack-dashboard
+    state: present
+
+- name: Configure the Horizon dashboard
+  lineinfile:
+    path: /etc/openstack-dashboard/local_settings.py
+    regexp: '^OPENSTACK_HOST ='
+    line: 'OPENSTACK_HOST = "192.168.56.113"'
+
+- name: Ensure the secret key is set
+  lineinfile:
+    path: /etc/openstack-dashboard/local_settings.py
+    regexp: '^SECRET_KEY ='
+    line: 'SECRET_KEY = "123456"'
+
+- name: Enable required Apache modules
+  command: a2enmod "{{ item }}"
+  with_items:
+    - wsgi
+    - headers
+
+- name: Restart Apache
+  systemd:
+    name: apache2
+    state: restarted
+    enabled: yes
+

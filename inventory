@@ -1,0 +1,12 @@
+[Controller]
+#Server 2
+192.168.56.113
+
+[Compute]
+#Server 2
+192.168.56.113
+
+[BlockStorage]
+#Server 2
+192.168.56.113
+
